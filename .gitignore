@@ -52,3 +52,6 @@ ENV/
 # *.pkl
 # *.pth
 # *.ckpt
+
+# data files
+data/
