@@ -10,7 +10,7 @@ def denormalize(tensor):
     return (tensor + 1) / 2
 
 
-def super_resolve_image(image_path, output_path, model_path='checkpoints/generator_final.pth'):
+def super_resolve_image(image_path, output_path, model_path='models/generator_final.pth'):
     """Apply super-resolution to a single image"""
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -61,7 +61,7 @@ def batch_super_resolve(input_dir, output_dir, model_path='checkpoints/generator
 
 if __name__ == '__main__':
     # Example: super-resolve a single image
-    # super_resolve_image('data/blurred/test.png', 'output/test_sr.png')
+    # super_resolve_image('test_images_blurred/test.png', 'test_results/test_sr.png')
     
     # Example: batch process all blurred images
-    batch_super_resolve('data/blurred', 'output/super_resolved')
+    batch_super_resolve('test_images_blurred', 'test_results/super_resolved')
