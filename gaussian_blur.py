@@ -1,8 +1,10 @@
 import os
 from PIL import Image, ImageFilter, UnidentifiedImageError
 
-input_folder = 'data/unblurred'
-output_folder = 'data/blurred'
+# Apply Gaussian blur to all images in the input folder and save to output folder
+# change input_folder and output_folder as needed
+input_folder = 'test_images'
+output_folder = 'test_images_blurred'
 os.makedirs(output_folder, exist_ok=True)
 
 for filename in os.listdir(input_folder):
