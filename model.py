@@ -35,8 +35,8 @@ class UpsampleBlock(nn.Module):
 
 
 class Generator(nn.Module):
-    """SRGAN Generator Network"""
-    def __init__(self, num_residual_blocks=16, upscale_factor=2):
+    """SRGAN Generator Network - Modified for deblurring (no upsampling)"""
+    def __init__(self, num_residual_blocks=8):
         super(Generator, self).__init__()
         
         # Initial convolution
@@ -56,12 +56,7 @@ class Generator(nn.Module):
             nn.BatchNorm2d(64)
         )
         
-        # Upsampling blocks
-        self.upsampling = nn.Sequential(
-            UpsampleBlock(64, upscale_factor),
-        )
-        
-        # Final convolution
+        # Final convolution (no upsampling for deblurring)
         self.conv3 = nn.Conv2d(64, 3, kernel_size=9, padding=4)
         
     def forward(self, x):
@@ -69,7 +64,6 @@ class Generator(nn.Module):
         res = self.residual_blocks(conv1)
         conv2 = self.conv2(res)
         out = conv1 + conv2
-        out = self.upsampling(out)
         out = self.conv3(out)
         return torch.tanh(out)
 

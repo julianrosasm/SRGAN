@@ -47,7 +47,7 @@ class SRGANDataset(Dataset):
         return lr_img, hr_img
 
 
-def get_dataloaders(lr_dir='data/blurred', hr_dir='data/unblurred', batch_size=16, hr_size=256):
+def get_dataloaders(lr_dir='data/blurred', hr_dir='data/unblurred', batch_size=16, hr_size=128):
     """Create train and validation dataloaders"""
     dataset = SRGANDataset(lr_dir, hr_dir, hr_size)
     
@@ -56,7 +56,7 @@ def get_dataloaders(lr_dir='data/blurred', hr_dir='data/unblurred', batch_size=1
     val_size = len(dataset) - train_size
     train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
     
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
     
     return train_loader, val_loader

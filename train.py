@@ -32,16 +32,21 @@ def train_srgan(
     num_epochs=100,
     batch_size=16,
     lr=1e-4,
-    checkpoint_dir='checkpoints'
+    model_dir='models/'
 ):
     """Train SRGAN model"""
     
-    # Setup device
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # Setup device - use MPS for M1/M2 Macs
+    if torch.backends.mps.is_available():
+        device = torch.device('mps')
+    elif torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
     print(f"Using device: {device}")
     
     # Create checkpoint directory
-    os.makedirs(checkpoint_dir, exist_ok=True)
+    os.makedirs(model_dir, exist_ok=True)
     
     # Initialize models
     generator = Generator().to(device)
@@ -145,11 +150,11 @@ def train_srgan(
                 'discriminator_state_dict': discriminator.state_dict(),
                 'optimizer_G_state_dict': optimizer_G.state_dict(),
                 'optimizer_D_state_dict': optimizer_D.state_dict(),
-            }, os.path.join(checkpoint_dir, f'srgan_epoch_{epoch+1}.pth'))
+            }, os.path.join(model_dir, f'srgan_epoch_{epoch+1}.pth'))
             print(f'Checkpoint saved at epoch {epoch+1}')
     
     # Save final model
-    torch.save(generator.state_dict(), os.path.join(checkpoint_dir, 'generator_final.pth'))
+    torch.save(generator.state_dict(), os.path.join(model_dir, 'generator_final.pth'))
     print('Training complete!')
 
 
@@ -157,7 +162,7 @@ if __name__ == '__main__':
     train_srgan(
         lr_dir='data/blurred',
         hr_dir='data/unblurred',
-        num_epochs=100,
-        batch_size=8,  # Adjust based on your GPU memory
+        num_epochs=50,  # Reduced for faster training on M1
+        batch_size=2,  # Reduced for MacBook Air M1 memory
         lr=1e-4
     )

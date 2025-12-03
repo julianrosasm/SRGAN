@@ -55,3 +55,6 @@ ENV/
 
 # data files
 data/
+
+# trained models
+models/
